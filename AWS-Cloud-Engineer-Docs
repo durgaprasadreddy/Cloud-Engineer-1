@@ -3,3 +3,26 @@ How to Create SSL/TLS Certificate for Ingress Controller
 kubectl get svc
 kubectl cluster-info
 kubectl get secret
+
+
+https://www.youtube.com/watch?v=1slRgW2IzJY
+- Authentication vs Authorization
+02:59 - Users and Groups
+09:09 - Role and RoleBinding
+13:31 - ClusterRole and ClusterRoleBinding
+16:16 - Service Accounts
+INTRODUCTION TO K8s RBAC | 30 DAYS FREE OPENSHIFT CLUSTER | LEARN RBAC WITH REAL CLUSTER | #devops
+
+https://github.com/pelthepu/Kubernetes/tree/master/resources/rbac
+In real time we need to provide access the following from the cluster
+Multiple nodes
+Namespaces
+deployments
+replicasets
+multiple pods
+
+sc , pvc, pv, sts, hpa
+svc, ing,cm,secret,limits,quota
+
+
+
