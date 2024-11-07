@@ -6,3 +6,20 @@ https://www.youtube.com/watch?v=8a0vtkWJIA4&t=10s
 https://www.youtube.com/watch?v=wGg-c63DLak
 How to use AWS Amplify to Build an Authentication / Login System in a React App Step by Step
 
+
+
+
+AWS Cognito
+https://www.youtube.com/watch?v=zTSGrd3HD0k
+
+What is the Amazon Cognito User Pool
+Amazon Cognito Benefits
+Creating Cognito User Pool - Step-by-Step
+Understand User, Groups & Creating a User in User Pool
+Amazon Cognito Hosted UI
+MFA integration
+Web Identity Federation
+Token management - ID Token and Access Token
+SDKs support - .NET, JAVA, Python, Node.js, etc.
+Amplify UI Components & Libraries - React, Angular, Vue, Flutter, etc.
+Identity Pools
