@@ -1,0 +1,117 @@
+create lambda function and export arn,resource type,region into excel and store into s3 bucket as csv and only map-migrated values from resource explorer in aws 
+
+Prerequisites
+AWS Lambda for the function execution.
+S3 bucket where the CSV file will be stored.
+IAM Role with the necessary permissions for Lambda to interact with AWS services (Resource Explorer, S3).
+
+Step 1: Create an IAM Role for the Lambda Function
+Make sure your Lambda function has the necessary permissions:
+
+resource-explorer:Search
+s3:PutObject
+s3:GetObject
+s3:ListBucket
+logs:CreateLogGroup
+logs:CreateLogStream
+logs:PutLogEvents
+
+
+
+I AM Policy
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "resource-explorer:Search",
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "logs:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+
+Step 2: Create the Lambda Function
+We'll use Python for the Lambda function. The function will:
+
+Query AWS Resource Explorer to find resources tagged with "map-migrated".
+Export the resource details (ARN, resource type, region) to a CSV.
+Upload the CSV file to an S3 bucket.
+
+import boto3
+import csv
+import os
+import io
+
+# Initialize clients
+resource_explorer_client = boto3.client('resource-explorer-2')
+s3_client = boto3.client('s3')
+
+# Define constants
+S3_BUCKET = 'your-s3-bucket-name'
+CSV_FILE_NAME = 'resource_export.csv'
+
+def lambda_handler(event, context):
+    # Step 1: Query AWS Resource Explorer for resources with "map-migrated" tag
+    resources = []
+    next_token = None
+    
+    while True:
+        response = resource_explorer_client.search(
+            QueryString='tag:map-migrated',
+            MaxResults=50,
+            NextToken=next_token
+        )
+        resources.extend(response['Resources'])
+        next_token = response.get('NextToken')
+        if not next_token:
+            break
+
+    # Step 2: Extract the required fields (ARN, ResourceType, Region)
+    rows = [["ARN", "ResourceType", "Region"]]
+    for resource in resources:
+        arn = resource.get('Arn')
+        resource_type = resource.get('ResourceType')
+        region = arn.split(":")[3]  # Extract the region from ARN
+        rows.append([arn, resource_type, region])
+    
+    # Step 3: Write the data to a CSV file in-memory
+    csv_buffer = io.StringIO()
+    csv_writer = csv.writer(csv_buffer)
+    csv_writer.writerows(rows)
+    
+    # Step 4: Upload the CSV file to S3
+    s3_client.put_object(
+        Bucket=S3_BUCKET,
+        Key=CSV_FILE_NAME,
+        Body=csv_buffer.getvalue()
+    )
+    
+    return {
+        'statusCode': 200,
+        'body': f'Successfully exported resources to s3://{S3_BUCKET}/{CSV_FILE_NAME}'
+    }
+
+
+Deploy the Lambda Function
+Go to the AWS Lambda Console.
+Create a new Lambda function with the runtime set to Python 3.9.
+Paste the above code into the function editor.
+Set environment variables:
+S3_BUCKET = your desired S3 bucket name.
+Attach the IAM role you created earlier to this function.
+Testing the Function
+You can test the function by triggering it manually:
+
+Go to the Lambda function page and click Test.
+Use an empty test event ({}) since the function doesn't rely on event inputs.
+
+Step 4: Verify the Output
+Go to the S3 Console.
+Navigate to your specified bucket.
+Confirm that the CSV file (resource_export.csv) is present and contains the resource data.
