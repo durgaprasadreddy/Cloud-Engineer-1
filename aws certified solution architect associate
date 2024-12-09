@@ -23,3 +23,63 @@ LinkedIn:   / abhishek-veeramalla-77b33996
 GitHub: https://github.com/iam-veeramalla
 Medium:   / abhishekveeramalla-av  
 YouTube:    / @abhishekveeramalla   .
+
+
+=================================================
+
+
+
+Github commands list
+
+git config --global user.name "Your Name"
+git config --global user.email "youremail@example.com"
+
+
+git config --list
+
+git init
+git clone <repository-url>
+git status
+git add <file>  # Add specific file
+git add .       # Add all files
+git commit -m "Commit message"
+git push origin <branch-name>
+git fetch
+
+
+List branches
+git branch
+
+create new branch
+git branch <new-branch-name>
+
+switch to an other branch
+git checkout <branch-name>
+
+create and switch to a new branch
+git checkout -b <new-branch-name>
+
+delete branch
+git branch -d <branch-name>  # Delete locally
+git push origin --delete <branch-name>  # Delete remotely
+
+
+git merge <branch-name>
+git push origin <tag-name>
+git push --tags  # Push all tags
+
+git tag -d <tag-name>  # Locally
+git push origin --delete <tag-name>  # Remotely
+
+git stash
+git stash list
+git stash drop <stash-id>
+
+
+git reset --soft HEAD~1
+git checkout -- <file>
+git reset HEAD <file>
+
+
+
+
